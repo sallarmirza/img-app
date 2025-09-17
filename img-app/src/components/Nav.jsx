@@ -1,4 +1,4 @@
-// add defualt material ui imports
+// default Material UI imports
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,40 +15,29 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
 // component
-export const ResponsiveAppBar = () => {
-  const navigate=useNavigate()
+export const Nav = () => {
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  const OpenProfile=()=>{
-    navigate('/profile')
-  }
-  const OpenGallery=()=>{
-    navigate('/Gallery')
-  }
+  // navigation handlers
+  const OpenProfile = () => navigate('/profile');
+  const OpenGallery = () => navigate('/gallery');
+  const OpenHome = () => navigate('/');
 
+  // menu handlers
+  const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
+  const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  const handleCloseNavMenu = () => setAnchorElNav(null);
+  const handleCloseUserMenu = () => setAnchorElUser(null);
 
   return (
-    <AppBar position="static" sx={{ mb: 4 }}>
+    <AppBar position="sticky" sx={{ mb: 4 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          {/* Logo left side (desktop) */}
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
@@ -68,10 +57,11 @@ export const ResponsiveAppBar = () => {
             Image Gen
           </Typography>
 
+          {/* Mobile menu icon */}
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
+              aria-label="menu"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
@@ -95,14 +85,26 @@ export const ResponsiveAppBar = () => {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
-              <MenuItem onClick={handleCloseNavMenu}>
+              <MenuItem
+                onClick={() => {
+                  handleCloseNavMenu();
+                  OpenHome();
+                }}
+              >
                 <Typography textAlign="center">Home</Typography>
               </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}>
+              <MenuItem
+                onClick={() => {
+                  handleCloseNavMenu();
+                  OpenGallery();
+                }}
+              >
                 <Typography textAlign="center">Gallery</Typography>
               </MenuItem>
             </Menu>
           </Box>
+
+          {/* Logo for mobile */}
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
@@ -120,23 +122,32 @@ export const ResponsiveAppBar = () => {
               textDecoration: 'none',
             }}
           >
-            IMAGE Gen
+            Image Gen
           </Typography>
+
+          {/* Desktop menu buttons */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button
-              onClick={handleCloseNavMenu}
+              onClick={() => {
+                handleCloseNavMenu();
+                OpenHome();
+              }}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
               Home
             </Button>
             <Button
-              onClick={()=>{handleCloseNavMenu(),OpenGallery();}}
+              onClick={() => {
+                handleCloseNavMenu();
+                OpenGallery();
+              }}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
               Gallery
             </Button>
-
           </Box>
+
+          {/* User menu (profile/avatar) */}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -159,8 +170,13 @@ export const ResponsiveAppBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center" onClick={OpenProfile}>Profile</Typography>
+              <MenuItem
+                onClick={() => {
+                  handleCloseUserMenu();
+                  OpenProfile();
+                }}
+              >
+                <Typography textAlign="center">Profile</Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">Account</Typography>

@@ -1,9 +1,17 @@
 import React from 'react';
 import { Card, CardContent, Typography, Avatar, Button } from '@mui/material';
 
+// temp user
+const user = {
+  name: "John Smith",
+  email: "john@example.com",
+  bio: "Artist, creating art",
+  profilePicture: "https://via.placeholder.com/150",
+};
 
-const UserProfile = ({ user }) => {
+const UserProfile = () => {
   return (
+    
     <Card sx={{ maxWidth: 345, margin: 'auto', marginTop: 5 }}>
       <CardContent>
         <Avatar
