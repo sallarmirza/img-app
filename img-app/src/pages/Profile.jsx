@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardContent, Typography, Avatar, Button } from '@mui/material';
-
+import { Card, CardContent, Typography, Avatar, Button, Box } from '@mui/material';
+import {Nav} from '../components/Nav'
 // temp user
 const user = {
   name: "John Smith",
@@ -11,7 +11,8 @@ const user = {
 
 const UserProfile = () => {
   return (
-    
+    <Box>
+      <Nav/>
     <Card sx={{ maxWidth: 345, margin: 'auto', marginTop: 5 }}>
       <CardContent>
         <Avatar
@@ -33,6 +34,7 @@ const UserProfile = () => {
         </Button>
       </CardContent>
     </Card>
+    </Box>
   );
 };
 
