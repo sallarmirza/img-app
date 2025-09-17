@@ -54,7 +54,7 @@ export const Nav = () => {
               textDecoration: 'none',
             }}
           >
-            Image Gen
+            PicGenie
           </Typography>
 
           {/* Mobile menu icon */}
