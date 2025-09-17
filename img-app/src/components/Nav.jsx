@@ -13,11 +13,21 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 // component
 export const ResponsiveAppBar = () => {
+  const navigate=useNavigate()
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+
+  const OpenProfile=()=>{
+    navigate('/profile')
+  }
+  const OpenGallery=()=>{
+    navigate('/Gallery')
+  }
 
 
   const handleOpenNavMenu = (event) => {
@@ -120,7 +130,7 @@ export const ResponsiveAppBar = () => {
               Home
             </Button>
             <Button
-              onClick={handleCloseNavMenu}
+              onClick={()=>{handleCloseNavMenu(),OpenGallery();}}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
               Gallery
@@ -150,7 +160,7 @@ export const ResponsiveAppBar = () => {
               onClose={handleCloseUserMenu}
             >
               <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Profile</Typography>
+                <Typography textAlign="center" onClick={OpenProfile}>Profile</Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">Account</Typography>

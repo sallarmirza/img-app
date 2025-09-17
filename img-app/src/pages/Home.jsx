@@ -1,7 +1,9 @@
 import React, { useReducer } from "react";
 import {ResponsiveAppBar} from '../components/Nav'
-import UserProfile from "../components/Profile";
+import UserProfile from "./Profile";
 import { Gallery } from "./Gallery";
+import { PromptBox } from "../components/PromptBox";
+import { ResponseBox } from "../components/ResponseBox";
 const user = {
   name: "Sallar Mirza",
   email: "sallar@example.com",
@@ -18,7 +20,10 @@ export const Home = () => {
 
       <main>
         <h2>Image Generator</h2>
+        <ResponseBox/>
+        <PromptBox/>
               <UserProfile user={user}/>
+              <Gallery/>
       </main>
     </div>
   );
