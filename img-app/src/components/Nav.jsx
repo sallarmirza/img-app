@@ -122,7 +122,7 @@ export const Nav = () => {
               textDecoration: 'none',
             }}
           >
-            Image Gen
+            Image
           </Typography>
 
           {/* Desktop menu buttons */}
