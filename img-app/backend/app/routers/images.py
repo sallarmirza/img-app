@@ -1,16 +1,14 @@
-from fastapi import APIRouter, Form
+from fastapi import APIRouter, Form, HTTPException
 from huggingface_hub import InferenceClient
-import os
-from dotenv import load_dotenv
+from fastapi.staticfiles import StaticFiles
 from PIL import Image
+import os
 import uuid
+from dotenv import load_dotenv
 
 load_dotenv()
 
-router = APIRouter(
-    prefix="/images",
-    tags=["Images"]
-)
+router = APIRouter(prefix="/images", tags=["Images"])
 
 client = InferenceClient(
     provider="nebius",
@@ -25,16 +23,13 @@ def generate_image(prompt: str = Form(...)):
             model="black-forest-labs/FLUX.1-dev"
         )
     except Exception as e:
-        return {"error": f"Image generation failed: {str(e)}"}
+        raise HTTPException(status_code=500, detail=f"Image generation failed: {str(e)}")
 
-    # make sure uploads folder exists
     os.makedirs("uploads", exist_ok=True)
-
-    # Save to disk
     filename = f"uploads/{uuid.uuid4()}.png"
     image.save(filename)
 
     return {
-        "message": "Image generated successfully!",
-        "file_path": filename  # later you can expose as /uploads/<filename>
+        "type": "image",
+        "data": f"/uploads/{os.path.basename(filename)}"
     }

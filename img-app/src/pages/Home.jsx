@@ -1,17 +1,22 @@
 import { Nav } from "../components/Nav";
-import { PromptBox } from "../components/PromptBox";
-import { ResponseBox } from "../components/ResponseBox";
-import { Typography, Box } from "@mui/material";
-
+import { Typography, Box } from "@mui/material"; 
+import { ImageGenerator } from "./ImageGenerator";
 export const Home = () => {
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", overflow:"hidden"}}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+      }}
+    >
       {/* Navbar */}
       <Box className="navbar">
         <Nav />
       </Box>
 
-      {/* Main content (scrollable) */}
+      {/* Main content */}
       <Box
         component="main"
         sx={{
@@ -36,21 +41,8 @@ export const Home = () => {
           Image Generator
         </Typography>
 
-        <ResponseBox />
-      </Box>
-
-      <Box
-        sx={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          width: "100%",
-          backgroundColor: "background.paper",
-          padding: 2,
-          zIndex: 1000,
-        }}
-      >
-        <PromptBox />
+        {/* ✅ now only one component handles prompt + response */}
+        <ImageGenerator />
       </Box>
     </Box>
   );
