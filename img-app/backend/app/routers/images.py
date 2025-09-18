@@ -7,8 +7,16 @@ import uuid
 from dotenv import load_dotenv
 
 load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
+
+
+api_key = os.getenv("HF_TOKEN")
+if not api_key:
+    raise RuntimeError("HF_TOKEN not set in environment variables")
 
 router = APIRouter(prefix="/images", tags=["Images"])
+
 
 client = InferenceClient(
     provider="nebius",
