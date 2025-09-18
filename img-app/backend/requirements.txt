@@ -2,3 +2,12 @@ fastapi
 uvicorn[standard]
 requests
 python-dotenv
+fastapi
+uvicorn[standard]
+sqlalchemy
+python-dotenv
+huggingface_hub
+pillow
+requests
+passlib[bcrypt]   # for later, when you add hashing
+python-jose[cryptography]  # for JWT later (optional)
