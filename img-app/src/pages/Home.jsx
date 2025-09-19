@@ -1,5 +1,5 @@
 import { Nav } from "../components/Nav";
-import { Typography, Box } from "@mui/material"; 
+import {  Box } from "@mui/material"; 
 import { ImageGenerator } from "./ImageGenerator";
 export const Home = () => {
   return (
@@ -11,12 +11,12 @@ export const Home = () => {
         overflow: "hidden",
       }}
     >
-      {/* Navbar */}
+      
       <Box className="navbar">
         <Nav />
       </Box>
 
-      {/* Main content */}
+
       <Box
         component="main"
         sx={{
@@ -28,20 +28,6 @@ export const Home = () => {
           overflowY: "auto",
         }}
       >
-        <Typography
-          variant="h4"
-          component="h2"
-          sx={{
-            fontWeight: "bold",
-            color: "primary.main",
-            textAlign: "center",
-            marginBottom: 2,
-          }}
-        >
-          Image Generator
-        </Typography>
-
-        {/* ✅ now only one component handles prompt + response */}
         <ImageGenerator />
       </Box>
     </Box>

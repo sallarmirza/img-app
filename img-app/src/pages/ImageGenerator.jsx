@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { PromptBox } from "../components/PromptBox";
 import { ResponseBox } from "../components/ResponseBox";
 import { generateImage } from "../services/api";
-
+import { Box } from "@mui/material";
 export const ImageGenerator = () => {
   const [response, setResponse] = useState(null);
 
   const handlePromptSubmit = async (prompt) => {
     try {
       const result = await generateImage(prompt);
-      // result.imageUrl is relative (e.g., "/uploads/xxx.png")
       setResponse({
         type: "image",
         data: `${import.meta.env.VITE_API_BASE_URL}${result.imageUrl}`,
@@ -20,9 +19,11 @@ export const ImageGenerator = () => {
   };
 
   return (
-    <div>
-      <PromptBox onSubmit={handlePromptSubmit} />
+    <div >
+      <Box>
       <ResponseBox response={response} />
-    </div>
-  );
+        <PromptBox onSubmit={handlePromptSubmit} />
+        </Box>
+      </div>
+      );
 };

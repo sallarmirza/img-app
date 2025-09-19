@@ -1,190 +1,417 @@
-// default Material UI imports
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import {
+  Drawer,
+  Box,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  IconButton,
+  Typography,
+  Avatar,
+  Chip,
+  TextField,
+  InputAdornment,
+  Badge
+} from '@mui/material';
+import {
+  Menu as MenuIcon,
+  History as HistoryIcon,
+  Person as ProfileIcon,
+  Logout as LogoutIcon,
+  Search as SearchIcon,
+  Star as StarIcon,
+  AutoAwesome as AutoAwesomeIcon
+} from '@mui/icons-material';
 
-// component
+const drawerWidth = 320;
+
 export const Nav = () => {
   const navigate = useNavigate();
-  const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
+  const location = useLocation();
+  const [isOpen, setIsOpen] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // navigation handlers
-  const OpenProfile = () => navigate('/profile');
-  const OpenGallery = () => navigate('/gallery');
-  const OpenHome = () => navigate('/');
+  // Navigation handlers
+  const navigateTo = (path) => {
+    navigate(path);
+  };
 
-  // menu handlers
-  const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
-  const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
+  // Sample prompt history data
+  const promptHistory = [
+    { id: 1, text: "A futuristic cityscape at night", date: "2 hours ago", favorite: true },
+    { id: 2, text: "Portrait of a cyberpunk samurai", date: "Yesterday", favorite: false },
+    { id: 3, text: "Fantasy landscape with floating islands", date: "2 days ago", favorite: true },
+    { id: 4, text: "Abstract geometric patterns in blue", date: "3 days ago", favorite: false },
+    { id: 5, text: "Vintage steampunk airship", date: "1 week ago", favorite: true },
+    { id: 6, text: "Underwater castle with coral reefs", date: "1 week ago", favorite: false },
+    { id: 7, text: "Medieval marketplace with magical creatures", date: "2 weeks ago", favorite: false },
+  ];
 
-  const handleCloseNavMenu = () => setAnchorElNav(null);
-  const handleCloseUserMenu = () => setAnchorElUser(null);
+  // Filter prompts based on search query
+  const filteredPrompts = promptHistory.filter(prompt =>
+    prompt.text.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <AppBar position="sticky" sx={{ mb: 4 }}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          {/* Logo left side (desktop) */}
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
+    <>
+      {/* Mobile toggle button */}
+      <IconButton
+        color="inherit"
+        aria-label="open drawer"
+        onClick={() => setIsOpen(true)}
+        edge="start"
+        sx={{
+          position: 'fixed',
+          top: 16,
+          left: 16,
+          zIndex: 1300,
+          display: { xs: 'block', md: 'none' },
+          backgroundColor: 'primary.main',
+          color: 'white',
+          '&:hover': {
+            backgroundColor: 'primary.dark',
+          },
+        }}
+      >
+        <MenuIcon />
+      </IconButton>
+
+      {/* Sidebar Drawer */}
+      <Drawer
+        variant="permanent"
+        open={isOpen}
+        sx={{
+          display: { xs: 'none', md: 'block' },
+          width: isOpen ? drawerWidth : 0,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+            backgroundColor: 'background.paper',
+            border: 'none',
+            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)',
+            overflowX: 'hidden',
+          },
+        }}
+      >
+        {/* Header with logo */}
+        <Box sx={{ p: 3, display: 'flex', alignItems: 'center' }}>
+          <AutoAwesomeIcon sx={{ mr: 1.5, fontSize: 28, color: 'primary.main' }} />
+          <Typography variant="h5" noWrap sx={{ fontWeight: 700, color: 'text.primary' }}>
             PicGenie
           </Typography>
+          <Chip 
+            icon={<StarIcon />} 
+            label="Pro" 
+            size="small" 
+            sx={{ ml: 1.5, backgroundColor: 'warning.light', color: 'white', fontWeight: 600 }}
+          />
+        </Box>
 
-          {/* Mobile menu icon */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="menu"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
-            >
-              <MenuItem
-                onClick={() => {
-                  handleCloseNavMenu();
-                  OpenHome();
-                }}
-              >
-                <Typography textAlign="center">Home</Typography>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleCloseNavMenu();
-                  OpenGallery();
-                }}
-              >
-                <Typography textAlign="center">Gallery</Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
+        <Divider />
 
-          {/* Logo for mobile */}
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+        {/* Navigation Items */}
+        <List sx={{ mt: 2, px: 1.5 }}>
+          <ListItem disablePadding>
+            <ListItemButton
+              selected={location.pathname === '/history'}
+              onClick={() => navigateTo('/history')}
+              sx={{
+                borderRadius: 2,
+                mb: 1,
+                '&.Mui-selected': {
+                  backgroundColor: 'primary.main',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: 'primary.dark',
+                  },
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: location.pathname === '/history' ? 'white' : 'grey.600' }}>
+                <HistoryIcon />
+              </ListItemIcon>
+              <ListItemText primary="Prompt History" />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton
+              selected={location.pathname === '/profile'}
+              onClick={() => navigateTo('/profile')}
+              sx={{
+                borderRadius: 2,
+                '&.Mui-selected': {
+                  backgroundColor: 'primary.main',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: 'primary.dark',
+                  },
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: location.pathname === '/profile' ? 'white' : 'grey.600' }}>
+                <ProfileIcon />
+              </ListItemIcon>
+              <ListItemText primary="Profile" />
+            </ListItemButton>
+          </ListItem>
+        </List>
+
+        <Divider sx={{ my: 2 }} />
+
+        {/* Search Bar */}
+        <Box sx={{ px: 2, mb: 2 }}>
+          <TextField
+            fullWidth
+            size="small"
+            placeholder="Search prompts..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon color="action" />
+                </InputAdornment>
+              ),
             }}
-          >
-            Image
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                backgroundColor: 'grey.50',
+              }
+            }}
+          />
+        </Box>
+
+        {/* Prompt History Section */}
+        <Box sx={{ px: 2, mb: 2 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: 'text.secondary', mb: 1 }}>
+            RECENT PROMPTS
           </Typography>
+        </Box>
 
-          {/* Desktop menu buttons */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Button
-              onClick={() => {
-                handleCloseNavMenu();
-                OpenHome();
-              }}
-              sx={{ my: 2, color: 'white', display: 'block' }}
-            >
-              Home
-            </Button>
-            <Button
-              onClick={() => {
-                handleCloseNavMenu();
-                OpenGallery();
-              }}
-              sx={{ my: 2, color: 'white', display: 'block' }}
-            >
-              Gallery
-            </Button>
-          </Box>
-
-          {/* User menu (profile/avatar) */}
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="User" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem
-                onClick={() => {
-                  handleCloseUserMenu();
-                  OpenProfile();
+        {/* Prompt List */}
+        <Box sx={{ overflow: 'auto', flex: 1, px: 1.5 }}>
+          {filteredPrompts.map((prompt) => (
+            <ListItem key={prompt.id} disablePadding sx={{ mb: 1.5 }}>
+              <ListItemButton
+                sx={{
+                  borderRadius: 2,
+                  py: 1.5,
+                  backgroundColor: 'grey.50',
+                  '&:hover': {
+                    backgroundColor: 'grey.100',
+                  },
                 }}
               >
-                <Typography textAlign="center">Profile</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Logout</Typography>
-              </MenuItem>
-            </Menu>
+                <Box sx={{ width: '100%' }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 500, flex: 1, pr: 1 }}>
+                      {prompt.text}
+                    </Typography>
+                    <IconButton size="small" sx={{ color: prompt.favorite ? 'warning.main' : 'grey.400' }}>
+                      <StarIcon fontSize="small" />
+                    </IconButton>
+                  </Box>
+                  <Typography variant="caption" color="text.secondary">
+                    {prompt.date}
+                  </Typography>
+                </Box>
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </Box>
+
+        <Divider sx={{ my: 2 }} />
+
+        {/* User Section */}
+        <Box sx={{ p: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Badge
+              overlap="circular"
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              badgeContent={
+                <Box
+                  sx={{
+                    width: 14,
+                    height: 14,
+                    borderRadius: '50%',
+                    backgroundColor: 'success.main',
+                    border: '2px solid white',
+                  }}
+                />
+              }
+            >
+              <Avatar
+                alt="User"
+                src="/static/images/avatar/2.jpg"
+                sx={{ width: 44, height: 44, mr: 2 }}
+              />
+            </Badge>
+            <Box sx={{ flex: 1 }}>
+              <Typography variant="body1" fontWeight="medium">
+                Alex Johnson
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Premium Plan
+              </Typography>
+            </Box>
+            <IconButton size="small" sx={{ color: 'grey.500' }}>
+              <LogoutIcon />
+            </IconButton>
           </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+        </Box>
+      </Drawer>
+
+      {/* Mobile Drawer */}
+      <Drawer
+        variant="temporary"
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        ModalProps={{
+          keepMounted: true,
+        }}
+        sx={{
+          display: { xs: 'block', md: 'none' },
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: drawerWidth,
+            backgroundColor: 'background.paper',
+          },
+        }}
+      >
+        {/* Mobile drawer content */}
+        <Box sx={{ p: 3, display: 'flex', alignItems: 'center' }}>
+          <AutoAwesomeIcon sx={{ mr: 1.5, fontSize: 28, color: 'primary.main' }} />
+          <Typography variant="h5" noWrap sx={{ fontWeight: 700, color: 'text.primary' }}>
+            PicMagic
+          </Typography>
+        </Box>
+
+        <Divider />
+
+        <List sx={{ mt: 2, px: 1.5 }}>
+          <ListItem disablePadding>
+            <ListItemButton
+              selected={location.pathname === '/history'}
+              onClick={() => {
+                navigateTo('/history');
+                setIsOpen(false);
+              }}
+              sx={{
+                borderRadius: 2,
+                mb: 1,
+                '&.Mui-selected': {
+                  backgroundColor: 'primary.main',
+                  color: 'white',
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: location.pathname === '/history' ? 'white' : 'grey.600' }}>
+                <HistoryIcon />
+              </ListItemIcon>
+              <ListItemText primary="Prompt History" />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton
+              selected={location.pathname === '/profile'}
+              onClick={() => {
+                navigateTo('/profile');
+                setIsOpen(false);
+              }}
+              sx={{
+                borderRadius: 2,
+                '&.Mui-selected': {
+                  backgroundColor: 'primary.main',
+                  color: 'white',
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: location.pathname === '/profile' ? 'white' : 'grey.600' }}>
+                <ProfileIcon />
+              </ListItemIcon>
+              <ListItemText primary="Profile" />
+            </ListItemButton>
+          </ListItem>
+        </List>
+
+        <Divider sx={{ my: 2 }} />
+
+        <Box sx={{ px: 2, mb: 2 }}>
+          <TextField
+            fullWidth
+            size="small"
+            placeholder="Search prompts..."
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon color="action" />
+                </InputAdornment>
+              ),
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                backgroundColor: 'grey.50',
+              }
+            }}
+          />
+        </Box>
+
+        <Box sx={{ px: 2, mb: 2 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: 'text.secondary', mb: 1 }}>
+            RECENT PROMPTS
+          </Typography>
+        </Box>
+
+        <Box sx={{ overflow: 'auto', flex: 1, px: 1.5 }}>
+          {promptHistory.slice(0, 3).map((prompt) => (
+            <ListItem key={prompt.id} disablePadding sx={{ mb: 1.5 }}>
+              <ListItemButton
+                sx={{
+                  borderRadius: 2,
+                  py: 1.5,
+                  backgroundColor: 'grey.50',
+                }}
+              >
+                <Box sx={{ width: '100%' }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 500, flex: 1, pr: 1 }}>
+                      {prompt.text}
+                    </Typography>
+                    <IconButton size="small" sx={{ color: prompt.favorite ? 'warning.main' : 'grey.400' }}>
+                      <StarIcon fontSize="small" />
+                    </IconButton>
+                  </Box>
+                  <Typography variant="caption" color="text.secondary">
+                    {prompt.date}
+                  </Typography>
+                </Box>
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </Box>
+
+        <Divider sx={{ my: 2 }} />
+
+        <Box sx={{ p: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Avatar
+              alt="User"
+              src="/static/images/avatar/2.jpg"
+              sx={{ width: 44, height: 44, mr: 2 }}
+            />
+            
+          </Box>
+        </Box>
+      </Drawer>
+    </>
   );
 };

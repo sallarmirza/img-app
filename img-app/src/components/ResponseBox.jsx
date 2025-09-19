@@ -6,7 +6,7 @@ export const ResponseBox = ({ response }) => {
     return (
       <Box textAlign="center" mt={4}>
         <Typography color="text.secondary">
-          No response yet — try generating something!
+           lets try the magic!
         </Typography>
       </Box>
     );
