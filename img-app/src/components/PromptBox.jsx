@@ -6,7 +6,7 @@ export const PromptBox = ({ onSubmit }) => {
 
   const handleSubmit = () => {
     if (input.trim()) {
-      onSubmit(input); // send to parent
+      onSubmit(input); 
       setInput("");    // clear after submit
     }
   };
