@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import users, images  # adjust import as you have it
+from .routers import users, images,gallery
 from . import database, models
 import os
+
 
 models.Base.metadata.create_all(bind=database.engine)
 
@@ -25,3 +26,4 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 # include routers
 app.include_router(users.router)
 app.include_router(images.router)
+app.include_router(gallery.router)

@@ -1,4 +1,3 @@
-// src/services/api.js
 import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -14,7 +13,7 @@ export async function generateImage(prompt) {
 
   if (!res.ok) throw new Error("Failed to generate image");
 
-  return await res.json();
+  return await res.json(); // expects { type, imageUrl }
 }
 
 export async function getGallery() {

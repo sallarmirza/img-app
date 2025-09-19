@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Box, TextField, Button } from "@mui/material";
 
-export const PromptBox = () => {
+export const PromptBox = ({ onSubmit }) => {
   const [input, setInput] = useState("");
 
   const handleSubmit = () => {
     if (input.trim()) {
-      console.log("Prompt submitted:", input);
-      setInput(""); // clear after submit
+      onSubmit(input); // send to parent
+      setInput("");    // clear after submit
     }
   };
 

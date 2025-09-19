@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {PromptBox} from '../components/PromptBox'
+import { PromptBox } from "../components/PromptBox";
 import { ResponseBox } from "../components/ResponseBox";
 import { generateImage } from "../services/api";
 
@@ -9,7 +9,11 @@ export const ImageGenerator = () => {
   const handlePromptSubmit = async (prompt) => {
     try {
       const result = await generateImage(prompt);
-      setResponse({ type: "image", data: `http://localhost:8000${result.imageUrl}` });
+      // result.imageUrl is relative (e.g., "/uploads/xxx.png")
+      setResponse({
+        type: "image",
+        data: `${import.meta.env.VITE_API_BASE_URL}${result.imageUrl}`,
+      });
     } catch (err) {
       setResponse({ type: "text", data: "Error generating image." });
     }

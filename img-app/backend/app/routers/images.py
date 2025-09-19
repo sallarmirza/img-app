@@ -1,15 +1,12 @@
 from fastapi import APIRouter, Form, HTTPException
 from huggingface_hub import InferenceClient
-from fastapi.staticfiles import StaticFiles
 from PIL import Image
 import os
 import uuid
 from dotenv import load_dotenv
 
+# Load .env
 load_dotenv()
-from dotenv import load_dotenv
-load_dotenv()
-
 
 api_key = os.getenv("HF_TOKEN")
 if not api_key:
@@ -17,10 +14,10 @@ if not api_key:
 
 router = APIRouter(prefix="/images", tags=["Images"])
 
-
+# Initialize Hugging Face inference client
 client = InferenceClient(
     provider="nebius",
-    api_key=os.environ["HF_TOKEN"]
+    api_key=api_key
 )
 
 @router.post("/generate")
@@ -39,5 +36,5 @@ def generate_image(prompt: str = Form(...)):
 
     return {
         "type": "image",
-        "data": f"/uploads/{os.path.basename(filename)}"
+        "imageUrl": f"/uploads/{os.path.basename(filename)}"
     }
